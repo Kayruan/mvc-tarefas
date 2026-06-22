@@ -1,21 +1,18 @@
 <?php
 session_start();
 
-// Estrutura base do roteador (os arquivos de controller serão criados nos próximos commits)
+require_once 'controllers/TarefaController.php';
+
+$controlador = new TarefaController();
 $acao = $_GET['acao'] ?? 'listar';
 
 switch ($acao) {
-    case 'listar':
-    case 'criar':
-    case 'salvar':
-    case 'editar':
-    case 'atualizar':
-    case 'concluir':
-    case 'excluir':
-        // As ações serão conectadas ao Controller no Commit 3
-        echo "Sistema de Tarefas - Rota de " . htmlspecialchars($acao) . " estruturada.";
-        break;
-    default:
-        echo "Sistema de Tarefas Inicializado.";
-        break;
+    case 'listar':    $controlador->listar(); break;
+    case 'criar':     $controlador->criar(); break;
+    case 'salvar':    $controlador->salvar(); break;
+    case 'editar':    $controlador->editar(); break;
+    case 'atualizar': $controlador->atualizar(); break;
+    case 'concluir':  $controlador->concluir(); break;
+    case 'excluir':   $controlador->excluir(); break;
+    default:          $controlador->listar(); break;
 }
