@@ -13,13 +13,11 @@ class TarefaController
     public function listar()
     {
         $tarefas = $this->modelo->listarTodas();
-        // Vamos criar esta view na próxima etapa
         require_once 'views/tarefas/lista.php';
     }
 
     public function criar()
     {
-        // Vamos criar esta view na próxima etapa
         require_once 'views/tarefas/formulario.php';
     }
 
@@ -30,12 +28,14 @@ class TarefaController
                 'titulo'      => $_POST['titulo'],
                 'descricao'   => $_POST['descricao'],
                 'prioridade'  => $_POST['prioridade'],
-                'data_limite' => $_POST['data_limite']
+                'data_limite' => date('Y-m-d') // Adicionado para evitar erro caso o banco exija
             ];
+            
             $this->modelo->cadastrar($dados);
             
             $_SESSION['mensagem'] = "Tarefa criada com sucesso!";
             header('Location: index.php?acao=listar');
+            exit;
         }
     }
 
@@ -55,30 +55,34 @@ class TarefaController
                 'descricao'     => $_POST['descricao'],
                 'prioridade'    => $_POST['prioridade'],
                 'status_tarefa' => $_POST['status_tarefa'],
-                'data_limite'   => $_POST['data_limite']
+                'data_limite'   => date('Y-m-d')
             ];
+            
             $this->modelo->atualizar($dados);
             
             $_SESSION['mensagem'] = "Tarefa atualizada com sucesso!";
             header('Location: index.php?acao=listar');
+            exit;
         }
     }
 
     public function concluir()
     {
-        $id = $_GET['id'];
-        $this->modelo->concluir($id);
-        
-        $_SESSION['mensagem'] = "Oba! Tarefa concluída!";
-        header('Location: index.php?acao=listar');
+        if (isset($_GET['id'])) {
+            $this->modelo->concluir($_GET['id']);
+            $_SESSION['mensagem'] = "Tarefa marcada como concluída!";
+            header('Location: index.php?acao=listar');
+            exit;
+        }
     }
 
     public function excluir()
     {
-        $id = $_GET['id'];
-        $this->modelo->excluir($id);
-        
-        $_SESSION['mensagem'] = "Tarefa excluída do sistema.";
-        header('Location: index.php?acao=listar');
+        if (isset($_GET['id'])) {
+            $this->modelo->excluir($_GET['id']);
+            $_SESSION['mensagem'] = "Tarefa removida do sistema.";
+            header('Location: index.php?acao=listar');
+            exit;
+        }
     }
 }
