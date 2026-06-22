@@ -28,8 +28,20 @@ class TarefaController
                 'titulo'      => $_POST['titulo'],
                 'descricao'   => $_POST['descricao'],
                 'prioridade'  => $_POST['prioridade'],
-                'data_limite' => date('Y-m-d') // Adicionado para evitar erro caso o banco exija
+                'data_limite' => date('Y-m-d')
             ];
+
+            // Tratamento de upload de imagem
+            if (!empty($_FILES['imagem']['name'])) {
+                $extensao = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
+                $nomeArquivo = time() . '.' . $extensao;
+                
+                if (move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo)) {
+                    $dados['imagem'] = $nomeArquivo;
+                }
+            } else {
+                $dados['imagem'] = null;
+            }
             
             $this->modelo->cadastrar($dados);
             
@@ -57,6 +69,18 @@ class TarefaController
                 'status_tarefa' => $_POST['status_tarefa'],
                 'data_limite'   => date('Y-m-d')
             ];
+
+            // Atualização de imagem (se houver nova)
+            if (!empty($_FILES['imagem']['name'])) {
+                $extensao = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
+                $nomeArquivo = time() . '.' . $extensao;
+                move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo);
+                $dados['imagem'] = $nomeArquivo;
+            } else {
+                // Mantém a imagem anterior se não enviar uma nova
+                $tarefaAntiga = $this->modelo->buscarPorId($_POST['id']);
+                $dados['imagem'] = $tarefaAntiga['imagem'];
+            }
             
             $this->modelo->atualizar($dados);
             
@@ -79,8 +103,14 @@ class TarefaController
     public function excluir()
     {
         if (isset($_GET['id'])) {
+            // Opcional: deletar o arquivo de imagem do servidor ao excluir a tarefa
+            $tarefa = $this->modelo->buscarPorId($_GET['id']);
+            if (!empty($tarefa['imagem']) && file_exists('uploads/' . $tarefa['imagem'])) {
+                unlink('uploads/' . $tarefa['imagem']);
+            }
+
             $this->modelo->excluir($_GET['id']);
-            $_SESSION['mensagem'] = "Tarefa removida do sistema.";
+            $_SESSION['mensagem'] = "Tarefa removida com sucesso!";
             header('Location: index.php?acao=listar');
             exit;
         }
