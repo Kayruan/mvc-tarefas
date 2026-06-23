@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>Agenda de Tarefas Pessoais</title>
     <style>
-        .card-tarefa { transition: 0.3s; border-left: 5px solid #ccc; height: 100%; }
+        .card-tarefa { transition: 0.3s; border-left: 5px solid #ccc; height: 100%; min-height: 200px; }
         .card-tarefa:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .prioridade-Alta { border-left-color: #dc3545; }
         .prioridade-Média { border-left-color: #ffc107; }
@@ -52,7 +52,7 @@
             <?php foreach ($tarefas as $t): ?>
             <div class="col-md-4 card-tarefa-wrapper mb-3">
                 <div class="card card-tarefa shadow-sm prioridade-<?= $t['prioridade'] ?>" 
-                     style="<?= !empty($t['imagem']) ? 'background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url("uploads/'.$t['imagem'].'"); background-size: cover; background-position: center;' : '' ?>">
+                     style="<?= !empty($t['imagem']) ? 'background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url("../../uploads/'.$t['imagem'].'"); background-size: cover; background-position: center;' : '' ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($t['titulo']) ?></h5>
                         <p class="card-text small"><?= htmlspecialchars($t['descricao'] ?? '') ?></p>
