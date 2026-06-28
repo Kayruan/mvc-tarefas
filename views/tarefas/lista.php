@@ -6,14 +6,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>Agenda de Tarefas Pessoais</title>
     <style>
-        .card-tarefa { transition: 0.3s; border-left: 5px solid #ccc; min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-tarefa { transition: 0.3s; border-left: 5px solid #ccc; min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
         .card-tarefa:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .prioridade-Alta { border-left-color: #dc3545; }
         .prioridade-Média { border-left-color: #ffc107; }
         .prioridade-Baixa { border-left-color: #198754; }
-        .status-badge-Agendada { bg-color: #6c757d; }
-        .status-badge-Em-Andamento { bg-color: #0d6efd; }
-        .status-badge-Concluída { bg-color: #198754; }
     </style>
 </head>
 <body class="bg-light">
@@ -105,9 +102,11 @@
         <div class="row" id="lista-tarefas">
             <?php foreach ($tarefas as $t): ?>
             <div class="col-md-4 card-tarefa-wrapper mb-4">
+                
                 <div class="card card-tarefa shadow-sm prioridade-<?= $t['prioridade'] ?>" 
-                     style="<?= !empty($t['imagem']) ? 'background: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.92)), url("uploads/'.$t['imagem'].'"); background-size: cover; background-position: center;' : '' ?>">
-                    <div class="card-body">
+                     style="<?= !empty($t['imagem']) ? "background: url('uploads/{$t['imagem']}'); background-size: cover; background-position: center;" : "" ?>">
+                    
+                    <div class="card-body <?= !empty($t['imagem']) ? 'bg-white bg-opacity-75' : '' ?> h-100 d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title fw-bold text-dark mb-0"><?= htmlspecialchars($t['titulo']) ?></h5>
                             <span class="badge <?= $t['status_tarefa'] == 'Concluída' ? 'bg-success' : ($t['status_tarefa'] == 'Em Andamento' ? 'bg-primary' : 'bg-secondary') ?>">
@@ -115,26 +114,26 @@
                             </span>
                         </div>
                         
-                        <p class="card-text text-muted small mb-3 text-truncate" style="max-height: 40px;"><?= htmlspecialchars($t['descricao'] ?? '') ?></p>
+                        <p class="card-text text-dark fw-medium small mb-3 text-truncate" style="max-height: 40px;"><?= htmlspecialchars($t['descricao'] ?? '') ?></p>
                         
-                        <div class="bg-white bg-opacity-70 p-2 rounded border mb-2 small text-dark shadow-xs">
+                        <div class="bg-white bg-opacity-75 p-2 rounded border border-light mb-2 small text-dark shadow-xs mt-auto">
                             <div><i class="bi bi-calendar3 me-2 text-primary"></i><b>Dia:</b> <?= $t['data_tarefa'] ? date('d/m/Y', strtotime($t['data_tarefa'])) : 'Não definido' ?></div>
                             <div><i class="bi bi-alarm me-2 text-primary"></i><b>Hora:</b> <?= $t['hora_tarefa'] ? date('H:i', strtotime($t['hora_tarefa'])) : 'Não definido' ?></div>
                             <div><i class="bi bi-hourglass-split me-2 text-primary"></i><b>Duração:</b> <?= (int)$t['duracao'] ?> hora(s)</div>
                         </div>
                         
-                        <span class="badge bg-secondary mb-1">Prioridade: <?= $t['prioridade'] ?></span>
+                        <span class="badge bg-dark bg-opacity-75 mb-2 w-50">Prioridade: <?= $t['prioridade'] ?></span>
                     </div>
                     
-                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center pt-0 pb-3">
+                    <div class="card-footer <?= !empty($t['imagem']) ? 'bg-white bg-opacity-75' : 'bg-transparent' ?> border-0 d-flex justify-content-between align-items-center pt-2 pb-3">
                         <div class="btn-group btn-group-sm shadow-xs">
-                            <a href="index.php?acao=alterarStatus&status=Agendada&id=<?= $t['id'] ?>" class="btn btn-outline-secondary" title="Agendar"><i class="bi bi-calendar"></i></a>
-                            <a href="index.php?acao=alterarStatus&status=Em%20Andamento&id=<?= $t['id'] ?>" class="btn btn-outline-primary" title="Iniciar"><i class="bi bi-play-fill"></i></a>
-                            <a href="index.php?acao=alterarStatus&status=Concluída&id=<?= $t['id'] ?>" class="btn btn-outline-success" title="Concluir"><i class="bi bi-check-lg"></i></a>
+                            <a href="index.php?acao=alterarStatus&status=Agendada&id=<?= $t['id'] ?>" class="btn btn-outline-secondary bg-white" title="Agendar"><i class="bi bi-calendar"></i></a>
+                            <a href="index.php?acao=alterarStatus&status=Em%20Andamento&id=<?= $t['id'] ?>" class="btn btn-outline-primary bg-white" title="Iniciar"><i class="bi bi-play-fill"></i></a>
+                            <a href="index.php?acao=alterarStatus&status=Concluída&id=<?= $t['id'] ?>" class="btn btn-outline-success bg-white" title="Concluir"><i class="bi bi-check-lg"></i></a>
                         </div>
                         <div class="d-flex gap-1">
-                            <a href="index.php?acao=editar&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-primary" title="Editar Estrutura"><i class="bi bi-pencil-square"></i></a>
-                            <a href="index.php?acao=excluir&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-danger btn-excluir" title="Excluir"><i class="bi bi-trash"></i></a>
+                            <a href="index.php?acao=editar&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-primary shadow-sm" title="Editar Estrutura"><i class="bi bi-pencil-square"></i></a>
+                            <a href="index.php?acao=excluir&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-danger btn-excluir shadow-sm" title="Excluir"><i class="bi bi-trash"></i></a>
                         </div>
                     </div>
                 </div>

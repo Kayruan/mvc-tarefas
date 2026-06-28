@@ -1,19 +1,24 @@
-# Gerenciador de Tarefas MVC
+# 📅 TaskMaster - Agenda Pessoal (PHP MVC)
 
-Sistema web para controle de tarefas pessoais, desenvolvido como projeto acadêmico utilizando PHP, MySQL e Bootstrap.
+Um sistema completo de gerenciamento de tarefas e agenda pessoal desenvolvido em **PHP Orientado a Objetos** utilizando o padrão arquitetural **MVC (Model-View-Controller)**.
 
-## Tecnologias Utilizadas
-- PHP (Padrão MVC)
-- MySQL
-- Bootstrap 5
-- JavaScript (Interatividade)
+## 🚀 Funcionalidades
 
-## Funcionalidades
-- CRUD Completo de tarefas.
-- Filtro e ordenação por prioridade e status.
-- Interface responsiva.
+O sistema foi desenhado para ser intuitivo, com foco em usabilidade e design visual:
+* **Dashboard Interativo:** Métricas dinâmicas com contagem de tarefas totais, agendadas, em andamento e concluídas.
+* **Gestão de Backlog:** Tabela detalhada de fluxo e estimativas (Data, Horário e Duração).
+* **Quadro de Tarefas Dinâmico:** Visualização em cartões (cards) com status visuais e mudança de estado em um clique.
+* **Upload de Imagens:** Suporte a upload de imagens de capa para os cartões de tarefas, deixando a interface rica e personalizada.
+* **Design Responsivo:** Interface construída com Bootstrap 5.
 
-## Como rodar
-1. Clone o repositório.
-2. Importe o arquivo SQL no phpMyAdmin.
-3. Configure o banco em `config/database.php`.
+## 🛠️ Tecnologias Utilizadas
+* **Backend:** PHP 8+ (PDO para segurança contra SQL Injection)
+* **Arquitetura:** MVC (Model, View, Controller)
+* **Banco de Dados:** MySQL
+* **Frontend:** HTML5, CSS3, Bootstrap 5 e Bootstrap Icons
+
+## ⚙️ Como executar o projeto localmente
+
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://seu-repositorio.git](https://seu-repositorio.git)
