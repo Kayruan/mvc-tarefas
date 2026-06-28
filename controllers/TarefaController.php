@@ -7,6 +7,9 @@ class TarefaController
 
     public function __construct()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->modelo = new Tarefa();
     }
 
@@ -25,27 +28,25 @@ class TarefaController
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dados = [
-                'titulo'      => $_POST['titulo'],
-                'descricao'   => $_POST['descricao'],
-                'prioridade'  => $_POST['prioridade'],
-                'data_limite' => date('Y-m-d')
+                'titulo'        => $_POST['titulo'],
+                'descricao'     => $_POST['descricao'],
+                'prioridade'    => $_POST['prioridade'],
+                'status_tarefa' => $_POST['status_tarefa'] ?? 'Agendada',
+                'data_tarefa'   => $_POST['data_tarefa'],
+                'hora_tarefa'   => $_POST['hora_tarefa'],
+                'duracao'       => $_POST['duracao']
             ];
 
-            // Tratamento de upload de imagem
             if (!empty($_FILES['imagem']['name'])) {
                 $extensao = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
                 $nomeArquivo = time() . '.' . $extensao;
-                
                 if (move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo)) {
                     $dados['imagem'] = $nomeArquivo;
                 }
-            } else {
-                $dados['imagem'] = null;
             }
-            
+
             $this->modelo->cadastrar($dados);
-            
-            $_SESSION['mensagem'] = "Tarefa criada com sucesso!";
+            $_SESSION['mensagem'] = "Tarefa agendada com sucesso!";
             header('Location: index.php?acao=listar');
             exit;
         }
@@ -67,34 +68,33 @@ class TarefaController
                 'descricao'     => $_POST['descricao'],
                 'prioridade'    => $_POST['prioridade'],
                 'status_tarefa' => $_POST['status_tarefa'],
-                'data_limite'   => date('Y-m-d')
+                'data_tarefa'   => $_POST['data_tarefa'],
+                'hora_tarefa'   => $_POST['hora_tarefa'],
+                'duracao'       => $_POST['duracao']
             ];
 
-            // Atualização de imagem (se houver nova)
             if (!empty($_FILES['imagem']['name'])) {
                 $extensao = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
                 $nomeArquivo = time() . '.' . $extensao;
                 move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo);
                 $dados['imagem'] = $nomeArquivo;
             } else {
-                // Mantém a imagem anterior se não enviar uma nova
                 $tarefaAntiga = $this->modelo->buscarPorId($_POST['id']);
                 $dados['imagem'] = $tarefaAntiga['imagem'];
             }
-            
+
             $this->modelo->atualizar($dados);
-            
             $_SESSION['mensagem'] = "Tarefa atualizada com sucesso!";
             header('Location: index.php?acao=listar');
             exit;
         }
     }
 
-    public function concluir()
+    public function alterarStatus()
     {
-        if (isset($_GET['id'])) {
-            $this->modelo->concluir($_GET['id']);
-            $_SESSION['mensagem'] = "Tarefa marcada como concluída!";
+        if (isset($_GET['id']) && isset($_GET['status'])) {
+            $this->modelo->alterarStatus($_GET['id'], $_GET['status']);
+            $_SESSION['mensagem'] = "Status da tarefa alterado para: " . $_GET['status'];
             header('Location: index.php?acao=listar');
             exit;
         }
@@ -103,14 +103,12 @@ class TarefaController
     public function excluir()
     {
         if (isset($_GET['id'])) {
-            // Opcional: deletar o arquivo de imagem do servidor ao excluir a tarefa
             $tarefa = $this->modelo->buscarPorId($_GET['id']);
             if (!empty($tarefa['imagem']) && file_exists('uploads/' . $tarefa['imagem'])) {
                 unlink('uploads/' . $tarefa['imagem']);
             }
-
             $this->modelo->excluir($_GET['id']);
-            $_SESSION['mensagem'] = "Tarefa removida com sucesso!";
+            $_SESSION['mensagem'] = "Tarefa removida da agenda.";
             header('Location: index.php?acao=listar');
             exit;
         }
