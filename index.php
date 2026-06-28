@@ -14,5 +14,6 @@ switch ($acao) {
     case 'atualizar': $controlador->atualizar(); break;
     case 'concluir':  $controlador->concluir(); break;
     case 'excluir':   $controlador->excluir(); break;
+    case 'alterarStatus': $controlador->alterarStatus(); break;
     default:          $controlador->listar(); break;
 }

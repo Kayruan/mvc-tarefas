@@ -93,8 +93,11 @@ class TarefaController
     public function alterarStatus()
     {
         if (isset($_GET['id']) && isset($_GET['status'])) {
-            $this->modelo->alterarStatus($_GET['id'], $_GET['status']);
-            $_SESSION['mensagem'] = "Status da tarefa alterado para: " . $_GET['status'];
+            // O urldecode trata o %20 do "Em Andamento" caso venha codificado
+            $status = urldecode($_GET['status']);
+            $this->modelo->alterarStatus($_GET['id'], $status);
+            
+            $_SESSION['mensagem'] = "Status alterado para: " . $status;
             header('Location: index.php?acao=listar');
             exit;
         }

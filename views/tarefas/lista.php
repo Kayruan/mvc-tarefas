@@ -128,11 +128,14 @@
                     <div class="card-footer <?= !empty($t['imagem']) ? 'bg-white bg-opacity-75' : 'bg-transparent' ?> border-0 d-flex justify-content-between align-items-center pt-2 pb-3">
                         <div class="btn-group btn-group-sm shadow-xs">
                             <a href="index.php?acao=alterarStatus&status=Agendada&id=<?= $t['id'] ?>" class="btn btn-outline-secondary bg-white" title="Agendar"><i class="bi bi-calendar"></i></a>
+        
                             <a href="index.php?acao=alterarStatus&status=Em%20Andamento&id=<?= $t['id'] ?>" class="btn btn-outline-primary bg-white" title="Iniciar"><i class="bi bi-play-fill"></i></a>
+        
                             <a href="index.php?acao=alterarStatus&status=Concluída&id=<?= $t['id'] ?>" class="btn btn-outline-success bg-white" title="Concluir"><i class="bi bi-check-lg"></i></a>
                         </div>
+    
                         <div class="d-flex gap-1">
-                            <a href="index.php?acao=editar&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-primary shadow-sm" title="Editar Estrutura"><i class="bi bi-pencil-square"></i></a>
+                             <a href="index.php?acao=editar&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-primary shadow-sm" title="Editar"><i class="bi bi-pencil-square"></i></a>
                             <a href="index.php?acao=excluir&id=<?= $t['id'] ?>" class="btn btn-sm btn-light border text-danger btn-excluir shadow-sm" title="Excluir"><i class="bi bi-trash"></i></a>
                         </div>
                     </div>
